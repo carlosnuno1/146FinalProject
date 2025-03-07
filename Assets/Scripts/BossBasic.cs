@@ -21,6 +21,9 @@ public class BossEnemy : MonoBehaviour
     private Transform player;
     private float fireCooldown;
 
+    private MetricsManager metricsManager;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -60,6 +63,9 @@ public class BossEnemy : MonoBehaviour
     void Shoot()
     {
         if (projectilePrefab == null || firePoint == null || player == null) return;
+
+        // records metric
+        MetricsManager.instance.bossMetrics.RecordShot();
 
         // Instantiate the projectile
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);

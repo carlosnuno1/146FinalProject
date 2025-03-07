@@ -43,6 +43,9 @@ public class Shooting : MonoBehaviour
     {
         if (bulletPrefab == null || bulletTransform == null) return;
 
+        // records metric
+        MetricsManager.instance.playerMetrics.RecordShot();
+
         // Instantiate the bullet
         GameObject bulletInstance = Instantiate(bulletPrefab, bulletTransform.position, Quaternion.identity);
 

@@ -16,10 +16,14 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"Enemy took {damage} damage! Current health: {currentHealth}");
 
+        // records metric
+        MetricsManager.instance.playerMetrics.RecordSuccessfulShot();
+
         if (currentHealth <= 0)
         {
             Die();
         }
+
     }
 
     void Die()
