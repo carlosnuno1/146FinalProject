@@ -15,7 +15,10 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log($"Player took {damage} damage! Current health: {currentHealth}");
-
+       
+        // records metric
+        MetricsManager.instance.bossMetrics.RecordSuccessfulShot();
+        
         if (currentHealth <= 0)
         {
             Die();
