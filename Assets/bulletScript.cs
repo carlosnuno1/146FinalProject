@@ -2,27 +2,44 @@ using UnityEngine;
 
 public class bulletScript : MonoBehaviour
 {
-    private Vector3 mousePos;
-    private Camera mainCam;
+    public float speed = 10f;
+    public int damage = 10;
+    public float lifetime = 5f;
+
     private Rigidbody2D rb;
-    public float force;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Vector2 moveDirection;
+
     void Start()
     {
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rb = GetComponent<Rigidbody2D>();
-        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePos - transform.position;
-        Vector3 rotation = transform.position - mousePos;
-        rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * force;
-        float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rot);
 
+        if (rb != null)
+        {
+            rb.linearVelocity = moveDirection * speed; // Apply movement to bullet
+        }
+
+        Destroy(gameObject, lifetime);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetDirection(Vector2 direction)
     {
-        
+        moveDirection = direction.normalized;
+
+        // Adjust rotation: Rotate 90 degrees counterclockwise
+        float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle); // Adjust if needed
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            other.GetComponent<EnemyHealth>()?.TakeDamage(damage);
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Bullet hit: " + other.name);
+        }
     }
 }
