@@ -9,11 +9,13 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        MetricsManager.instance.playerMetrics.RecordHealth(currentHealth);
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        MetricsManager.instance.playerMetrics.RecordHealth(currentHealth);
         Debug.Log($"Player took {damage} damage! Current health: {currentHealth}");
        
         // records metric
@@ -28,6 +30,7 @@ public class PlayerHealth : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        MetricsManager.instance.playerMetrics.RecordHealth(currentHealth);
         Debug.Log($"Player healed {amount} health! Current health: {currentHealth}");
     }
 

@@ -11,6 +11,8 @@ public class Metrics {
     public int Blocks { get; private set; }
     public int SuccessfulBlocks { get; private set; }
 
+    public int Health {get; private set;}
+
     private string _name;
 
     public Metrics(string name) {
@@ -28,6 +30,8 @@ public class Metrics {
     public void RecordSuccessfulDodge() { SuccessfulDodges++; UpdateBlackBoard(); }
     public void RecordBlock() { Blocks++; UpdateBlackBoard();}
     public void RecordSuccessfulBlock() { SuccessfulBlocks++; UpdateBlackBoard(); }
+
+    public void RecordHealth(int health) { Health = health; UpdateBlackBoard(); }
 
     public void PrintStats() {
         // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
@@ -121,6 +125,9 @@ public class MetricsManager : MonoBehaviour
 
         SetOrAddVariable("CurrentDistance", CurrentDistance);
         SetOrAddVariable("AverageDistance", AverageDistance);
+
+        SetOrAddVariable("PlayerHealth", playerMetrics.Health);
+        SetOrAddVariable("BossHealth", bossMetrics.Health);
 
     }
 

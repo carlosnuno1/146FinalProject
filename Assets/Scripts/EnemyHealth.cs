@@ -9,6 +9,7 @@ public class EnemyHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        MetricsManager.instance.bossMetrics.RecordHealth(currentHealth);
     }
 
     public void TakeDamage(int damage)
@@ -18,6 +19,7 @@ public class EnemyHealth : MonoBehaviour
 
         // records metric
         MetricsManager.instance.playerMetrics.RecordSuccessfulShot();
+        MetricsManager.instance.bossMetrics.RecordHealth(currentHealth);
 
         if (currentHealth <= 0)
         {

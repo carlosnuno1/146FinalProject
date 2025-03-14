@@ -14,11 +14,10 @@ public partial class DodgeAwayFromPlayerAction : Action
     {
         if (Boss == null)
         {
-            Debug.Log("Boss", Boss.Value);
+
             Debug.LogError("BossEnemy component is missing on the Boss GameObject.");
             return Status.Failure;
         }
-         Debug.Log("Boss", Boss.Value);
 
         if (!Boss.Value.CanDodge()){
             return Status.Failure;
