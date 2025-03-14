@@ -78,7 +78,7 @@ public class MetricsManager : MonoBehaviour
             totalDistance += CurrentDistance;
             distanceSamples++;
             AverageDistance = distanceSamples > 0 ? totalDistance / distanceSamples : 0;
-            // Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
+            Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
             UpdateBlackBoard();
         }
     }
@@ -101,17 +101,23 @@ public class MetricsManager : MonoBehaviour
 
         SetOrAddVariable("PlayerShots", playerMetrics.Shots);
         SetOrAddVariable("PlayerSuccessfulShots", playerMetrics.SuccessfulShots);
+        SetOrAddVariable("PlayerShotAccuracy", playerMetrics.Shots > 0 ? (float)playerMetrics.SuccessfulShots / playerMetrics.Shots : 0);
         SetOrAddVariable("PlayerDodges", playerMetrics.Dodges);
         SetOrAddVariable("PlayerSuccessfulDodges", playerMetrics.SuccessfulDodges);
+        SetOrAddVariable("PlayerDodgeAccuracy", playerMetrics.Dodges > 0 ? (float)playerMetrics.SuccessfulDodges / playerMetrics.Dodges : 0);
         SetOrAddVariable("PlayerBlocks", playerMetrics.Blocks);
         SetOrAddVariable("PlayerSuccessfulBlocks", playerMetrics.SuccessfulBlocks);
+        SetOrAddVariable("PlayerBlockAccuracy", playerMetrics.Blocks > 0 ? (float)playerMetrics.SuccessfulBlocks / playerMetrics.Blocks : 0);
         
         SetOrAddVariable("BossShots", bossMetrics.Shots);
         SetOrAddVariable("BossSuccessfulShots", bossMetrics.SuccessfulShots);
+        SetOrAddVariable("BossShotAccuracy", bossMetrics.Shots > 0 ? (float)bossMetrics.SuccessfulShots / bossMetrics.Shots : 0);
         SetOrAddVariable("BossDodges", bossMetrics.Dodges);
         SetOrAddVariable("BossSuccessfulDodges", bossMetrics.SuccessfulDodges);
+        SetOrAddVariable("BossDodgeAccuracy", bossMetrics.Dodges > 0 ? (float)bossMetrics.SuccessfulDodges / bossMetrics.Dodges : 0);
         SetOrAddVariable("BossBlocks", bossMetrics.Blocks);
         SetOrAddVariable("BossSuccessfulBlocks", bossMetrics.SuccessfulBlocks);
+        SetOrAddVariable("BossBlockAccuracy", bossMetrics.Blocks > 0 ? (float)bossMetrics.SuccessfulBlocks / bossMetrics.Blocks : 0);
 
         SetOrAddVariable("CurrentDistance", CurrentDistance);
         SetOrAddVariable("AverageDistance", AverageDistance);

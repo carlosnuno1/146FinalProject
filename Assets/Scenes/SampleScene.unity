@@ -403,6 +403,7 @@ MonoBehaviour:
   player: {fileID: 1367422511}
   boss: {fileID: 1339495193}
   distanceInvokeTime: 1
+  behaviorGraphAgent: {fileID: 0}
 --- !u!4 &706787570
 Transform:
   m_ObjectHideFlags: 0
@@ -720,6 +721,9 @@ MonoBehaviour:
   firePoint: {fileID: 442470939}
   fireRate: 2
   projectileSpeed: 5
+  dodgeForce: 15
+  dodgeDuration: 0.2
+  dodgeCooldown: 1
 --- !u!50 &1339495196
 Rigidbody2D:
   serializedVersion: 5
@@ -892,7 +896,8 @@ MonoBehaviour:
   m_Graph: {fileID: -6861371132301923593, guid: 264ede046c4770c45983a06eb094b7ec, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 5871993845796045065
-  - rid: 5871993845796045372
+  - rid: 5871993847682695253
+  - rid: 5871993848678580250
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -906,14 +911,22 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 1339495193}
-    - rid: 5871993845796045372
+    - rid: 5871993847682695253
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 17100485918891294605
-          m_Value1: 16373734608485658657
-        Name: MetricsManager
-        m_Value: {fileID: 706787568}
+          m_Value0: 11684946134985423529
+          m_Value1: 1071625871350744345
+        Name: Player
+        m_Value: {fileID: 1367422511}
+    - rid: 5871993848678580250
+      type: {class: 'BlackboardVariable`1[[BossEnemy, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18438063991608213895
+          m_Value1: 9817637599929278906
+        Name: BossEnemy
+        m_Value: {fileID: 1339495194}
 --- !u!1 &1367422511
 GameObject:
   m_ObjectHideFlags: 0

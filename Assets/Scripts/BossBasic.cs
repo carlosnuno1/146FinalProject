@@ -18,10 +18,18 @@ public class BossEnemy : MonoBehaviour
     public float fireRate = 2f; // Seconds between shots
     public float projectileSpeed = 5f;
 
+    [Header("Dodging")]
+    public float dodgeForce = 15f;
+    public float dodgeDuration = 0.2f;
+    public float dodgeCooldown = 1f;
+    private bool canDodge = true;
+    private bool isDodging = false;
+    private float dodgeTimer = 0f;
+    private float cooldownTimer = 0f;
+    private Vector2 lastDodgeDirection = Vector2.zero;
+
     private Transform player;
     private float fireCooldown;
-
-    private MetricsManager metricsManager;
 
 
     void Start()
@@ -34,8 +42,9 @@ public class BossEnemy : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
-        HandleShooting();
+        // HandleMovement();
+        // HandleShooting();
+        UpdateDodgeState();
     }
 
     void HandleMovement()
@@ -78,6 +87,45 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    public bool CanDodge(){
+        if (player == null || !canDodge || isDodging) return false;
+        return true;
+    }
+
+    public void Dodge(Vector2 direction)
+    {
+        // Record dodge attempt for the boss
+        MetricsManager.instance.bossMetrics.RecordDodge();
+
+        isDodging = true;
+        canDodge = false;
+        dodgeTimer = dodgeDuration;
+
+        // Apply dodge force
+        rb.linearVelocity = direction * dodgeForce;
+    }
+
+    void UpdateDodgeState()
+    {
+        if (isDodging)
+        {
+            dodgeTimer -= Time.deltaTime;
+            if (dodgeTimer <= 0)
+            {
+                isDodging = false;
+                cooldownTimer = dodgeCooldown;
+                rb.linearVelocity = Vector2.zero; // Stop movement after dodge
+            }
+        }
+        else if (!canDodge)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0)
+            {
+                canDodge = true;
+            }
+        }
+    }
 
     void OnDrawGizmosSelected()
     {
