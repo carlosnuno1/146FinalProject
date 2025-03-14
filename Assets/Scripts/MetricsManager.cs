@@ -23,7 +23,7 @@ public class Metrics {
     public void RecordSuccessfulBlock() { SuccessfulBlocks++; }
 
     public void PrintStats() {
-        Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
+        // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
     }
 }
 
@@ -67,7 +67,7 @@ public class MetricsManager : MonoBehaviour
             totalDistance += CurrentDistance;
             distanceSamples++;
             AverageDistance = distanceSamples > 0 ? totalDistance / distanceSamples : 0;
-            Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
+            // Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
         }
     }
 

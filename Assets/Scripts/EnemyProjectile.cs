@@ -34,6 +34,9 @@ public class EnemyProjectile : MonoBehaviour
         {
             other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
             Destroy(gameObject);
+        } else if (other.CompareTag("Shield"))
+        {
+            Destroy(gameObject);
         }
     }
 }

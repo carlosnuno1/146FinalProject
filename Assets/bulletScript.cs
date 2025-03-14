@@ -39,7 +39,10 @@ public class bulletScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Bullet hit: " + other.name);
+            if (other.name == "Sheild"){
+                Debug.Log("Bullet hit: " + other.name);
+                Destroy(gameObject);
+            }
         }
     }
 }
