@@ -28,6 +28,14 @@ public class BossEnemy : MonoBehaviour
     private float cooldownTimer = 0f;
     private Vector2 lastDodgeDirection = Vector2.zero;
 
+    [Header("Shield Settings")]
+     public GameObject shieldObject;
+     public float shieldDuration = 2f;
+
+     private float shieldTimer;
+     private bool canShield = true;
+     private bool isShielding = false;
+
     private Transform player;
     private float fireCooldown;
 
@@ -38,6 +46,7 @@ public class BossEnemy : MonoBehaviour
         startPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         fireCooldown = fireRate; // Start at max cooldown
+        shieldTimer = shieldDuration;
     }
 
     void Update()
@@ -45,6 +54,7 @@ public class BossEnemy : MonoBehaviour
         // HandleMovement();
         // HandleShooting();
         UpdateDodgeState();
+        UpdateBlockState();
     }
 
     void HandleMovement()
@@ -85,6 +95,55 @@ public class BossEnemy : MonoBehaviour
         {
             projectileScript.SetDirection((player.position - firePoint.position).normalized);
         }
+    }
+
+    public bool CanBlock()
+    {
+        return player != null && canShield && !isShielding;
+    }
+
+    public void Block()
+    {
+        if (!CanBlock() || isShielding) return;
+
+        isShielding = true;
+        shieldObject.SetActive(true);
+        //Debug.Log("Boss started blocking.");
+    }
+
+    public void UpdateBlockState()
+    {
+        if (isShielding)
+        {
+            // Decrease shield timer while active
+            shieldTimer -= Time.deltaTime;
+            if (shieldTimer <= 0)
+            {
+                StopBlock(); // Automatically stop if timer runs out
+            }
+        }
+        else
+        {
+            // Regenerate shield when not in use
+            if (shieldTimer < shieldDuration)
+            {
+                shieldTimer += Time.deltaTime/4;
+            }
+        }
+    }
+
+    public void StopBlock()
+    {
+        if (!isShielding) return;  // Prevent multiple calls
+
+        isShielding = false;
+        shieldObject.SetActive(false);
+
+        Debug.Log("Boss stopped blocking. Remaining shield time: " + shieldTimer);
+    }
+
+    public bool ShieldStatus(){
+        return isShielding;
     }
 
     public bool CanDodge(){
