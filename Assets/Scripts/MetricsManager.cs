@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.Behavior;
+using Unity.VisualScripting;
 
 
 public class Metrics {
@@ -15,12 +17,17 @@ public class Metrics {
         _name = name;
     }
 
-    public void RecordShot() { Shots++; PrintStats();}
-    public void RecordSuccessfulShot() { SuccessfulShots++; PrintStats();}
-    public void RecordDodge() { Dodges++; }
-    public void RecordSuccessfulDodge() { SuccessfulDodges++; }
-    public void RecordBlock() { Blocks++; }
-    public void RecordSuccessfulBlock() { SuccessfulBlocks++; }
+    private void UpdateBlackBoard(){
+        MetricsManager.instance.UpdateBlackBoard();
+    }
+
+
+    public void RecordShot() { Shots++; UpdateBlackBoard();}
+    public void RecordSuccessfulShot() { SuccessfulShots++; UpdateBlackBoard();}
+    public void RecordDodge() { Dodges++; UpdateBlackBoard();}
+    public void RecordSuccessfulDodge() { SuccessfulDodges++; UpdateBlackBoard(); }
+    public void RecordBlock() { Blocks++; UpdateBlackBoard();}
+    public void RecordSuccessfulBlock() { SuccessfulBlocks++; UpdateBlackBoard(); }
 
     public void PrintStats() {
         // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
@@ -47,6 +54,8 @@ public class MetricsManager : MonoBehaviour
 
     public static MetricsManager instance {get; private set;}
 
+    [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
+
     private void Awake()
     {
         if (instance != null && instance != this) {
@@ -54,6 +63,8 @@ public class MetricsManager : MonoBehaviour
         } else {
             instance = this;
         }
+        behaviorGraphAgent = boss.GetComponent<BehaviorGraphAgent>();
+        Debug.Log(behaviorGraphAgent);
     } 
 
     public void Start()
@@ -68,7 +79,44 @@ public class MetricsManager : MonoBehaviour
             distanceSamples++;
             AverageDistance = distanceSamples > 0 ? totalDistance / distanceSamples : 0;
             // Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
+            UpdateBlackBoard();
         }
     }
+    
+    // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
+    // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/api/Unity.Behavior.BlackboardReference.html
+    public void UpdateBlackBoard(){
+        if (behaviorGraphAgent == null) return;
+
+        var blackboard = behaviorGraphAgent.BlackboardReference;
+
+        void SetOrAddVariable<T>(string key, T value)
+        {
+            if (!blackboard.SetVariableValue(key, value))
+            {
+
+                blackboard.AddVariable(key, value);
+            }
+        }
+
+        SetOrAddVariable("PlayerShots", playerMetrics.Shots);
+        SetOrAddVariable("PlayerSuccessfulShots", playerMetrics.SuccessfulShots);
+        SetOrAddVariable("PlayerDodges", playerMetrics.Dodges);
+        SetOrAddVariable("PlayerSuccessfulDodges", playerMetrics.SuccessfulDodges);
+        SetOrAddVariable("PlayerBlocks", playerMetrics.Blocks);
+        SetOrAddVariable("PlayerSuccessfulBlocks", playerMetrics.SuccessfulBlocks);
+        
+        SetOrAddVariable("BossShots", bossMetrics.Shots);
+        SetOrAddVariable("BossSuccessfulShots", bossMetrics.SuccessfulShots);
+        SetOrAddVariable("BossDodges", bossMetrics.Dodges);
+        SetOrAddVariable("BossSuccessfulDodges", bossMetrics.SuccessfulDodges);
+        SetOrAddVariable("BossBlocks", bossMetrics.Blocks);
+        SetOrAddVariable("BossSuccessfulBlocks", bossMetrics.SuccessfulBlocks);
+
+        SetOrAddVariable("CurrentDistance", CurrentDistance);
+        SetOrAddVariable("AverageDistance", AverageDistance);
+
+    }
+
 
 }

@@ -692,6 +692,7 @@ GameObject:
   - component: {fileID: 1339495194}
   - component: {fileID: 1339495199}
   - component: {fileID: 1339495200}
+  - component: {fileID: 1339495201}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Enemy
@@ -789,7 +790,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 0.45456693, b: 0, a: 1}
   m_FlipX: 0
@@ -876,6 +877,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
+--- !u!114 &1339495201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339495193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: -6861371132301923593, guid: 264ede046c4770c45983a06eb094b7ec, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 5871993845796045065
+  - rid: 5871993845796045372
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5871993845796045065
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 1339495193}
+    - rid: 5871993845796045372
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17100485918891294605
+          m_Value1: 16373734608485658657
+        Name: MetricsManager
+        m_Value: {fileID: 706787568}
 --- !u!1 &1367422511
 GameObject:
   m_ObjectHideFlags: 0
