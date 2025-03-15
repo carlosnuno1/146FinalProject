@@ -32,7 +32,10 @@ public partial class DodgeAwayFromPlayerAction : Action
 
     protected override Status OnUpdate()
     {
-        return Status.Success;
+        if (!Boss.Value.DodgeStatus()) { // if not dodging anymore return success
+            return Status.Success;
+        }
+        return Status.Running;
     }
 
     protected override void OnEnd()

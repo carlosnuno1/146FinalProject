@@ -114,6 +114,10 @@ public class BossEnemy : MonoBehaviour
         rb.linearVelocity = direction * dodgeForce;
     }
 
+    public bool DodgeStatus(){
+        return isDodging;
+    }
+
     void UpdateDodgeState()
     {
         if (isDodging)
