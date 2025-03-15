@@ -9,6 +9,7 @@ public class BossEnemy : MonoBehaviour
     public float hoverSpeed = 2f;
 
     private Vector2 startPosition;
+    private Vector2 moveDirection;
     private Rigidbody2D rb;
     private float moveTimer;
     
@@ -42,18 +43,26 @@ public class BossEnemy : MonoBehaviour
 
     void Update()
     {
-        // HandleMovement();
+        HandleMovement();
         // HandleShooting();
         UpdateDodgeState();
     }
 
+    public void SetMoveDirection(Vector2 direction)
+    {
+        moveDirection = direction;
+    }
+
     void HandleMovement()
     {
-        // Move in a pattern (Hovering left and right)
-        float newX = startPosition.x + Mathf.Sin(Time.time * hoverSpeed) * moveRangeX;
-        float newY = startPosition.y + Mathf.Cos(Time.time * (hoverSpeed / 2)) * moveRangeY;
-
-        rb.MovePosition(new Vector2(newX, newY));
+        if(Vector2.Distance(transform.position, player.position) < 5f)
+        {
+            rb.linearVelocity = moveDirection * moveSpeed;
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
     }
 
     void HandleShooting()
