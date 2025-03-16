@@ -67,6 +67,8 @@ public class Metrics
         UpdateBlackBoard();
     }
 
+    public bool AreBullets => PlayerBulletManager.Instance.BulletCount();
+
     public void PrintStats()
     {
         // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
@@ -192,5 +194,7 @@ public class MetricsManager : MonoBehaviour
 
         SetOrAddVariable("PlayerHealth", playerMetrics.Health);
         SetOrAddVariable("BossHealth", bossMetrics.Health);
+
+        SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
     }
 }

@@ -39,7 +39,7 @@ public class bulletScript : MonoBehaviour
         }
         else
         {
-            if (other.name == "Sheild"){
+            if (other.name == "Shield"){
                 Debug.Log("Bullet hit: " + other.name);
                 Destroy(gameObject);
             }
