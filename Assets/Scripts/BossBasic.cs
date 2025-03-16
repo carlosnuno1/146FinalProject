@@ -27,7 +27,9 @@ public class BossEnemy : MonoBehaviour
     private bool isDodging = false;
     private float dodgeTimer = 0f;
     private float cooldownTimer = 0f;
-    private Vector2 lastDodgeDirection = Vector2.zero;
+
+    private Vector2 screenBounds;
+
 
     private Transform player;
     private float fireCooldown;
@@ -39,13 +41,32 @@ public class BossEnemy : MonoBehaviour
         startPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         fireCooldown = fireRate; // Start at max cooldown
+
+
+        // calculate screen bounds
+        Camera cam = Camera.main;
+
+        Vector2 screenMin = cam.ViewportToWorldPoint(new Vector3(0, 0, 0)); // Bottom-left corner
+        Vector2 screenMax = cam.ViewportToWorldPoint(new Vector3(1, 1, 0)); // Top-right corner
+
+        screenBounds = new Vector2(screenMax.x, screenMax.y);
     }
+
+    private void ClampPosition()
+    {
+        float clampedX = Mathf.Clamp(transform.position.x, -screenBounds.x, screenBounds.x);
+        float clampedY = Mathf.Clamp(transform.position.y, -screenBounds.y, screenBounds.y);
+
+        transform.position = new Vector2(clampedX, clampedY);
+    }
+
 
     void Update()
     {
         HandleMovement();
         // HandleShooting();
         UpdateDodgeState();
+        ClampPosition();
     }
 
     public void SetMoveDirection(Vector2 direction)
@@ -55,6 +76,7 @@ public class BossEnemy : MonoBehaviour
 
     void HandleMovement()
     {
+        if (isDodging) return; // Don't move while dodging
         if(Vector2.Distance(transform.position, player.position) < 5f)
         {
             rb.linearVelocity = moveDirection * moveSpeed;
@@ -110,8 +132,16 @@ public class BossEnemy : MonoBehaviour
         canDodge = false;
         dodgeTimer = dodgeDuration;
 
+        Debug.Log("Dodge: " + direction);
+
         // Apply dodge force
         rb.linearVelocity = direction * dodgeForce;
+
+    }
+
+    public bool DodgeStatus()
+    {
+        return isDodging;
     }
 
     void UpdateDodgeState()

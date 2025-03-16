@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2963378246187818818}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,7 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecbea5e8a2cb6947adbdff70859a389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 10
+  speed: 10
+  damage: 10
   lifetime: 3
 --- !u!50 &215791215278031897
 Rigidbody2D:
