@@ -898,38 +898,11 @@ MonoBehaviour:
   - rid: 5871993845796045065
   - rid: 5871993847682695253
   - rid: 5871993848678580250
-  - rid: 3833441034550641385
-  - rid: 3833441035254497452
-  - rid: 3833441035254497453
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
-    - rid: 3833441034550641385
-      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 8699323534519528736
-          m_Value1: 17210976024415097348
-        Name: boss bullet point
-        m_Value: {fileID: 442470939}
-    - rid: 3833441035254497452
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 10923138421187563565
-          m_Value1: 9044313611009096279
-        Name: bossbulletspeed
-        m_Value: 10
-    - rid: 3833441035254497453
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 2632539275888217671
-          m_Value1: 735746957185913472
-        Name: firerate
-        m_Value: 1
     - rid: 5871993845796045065
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
