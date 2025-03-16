@@ -49,6 +49,7 @@ public class BossEnemy : MonoBehaviour
         startPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         fireCooldown = fireRate; // Start at max cooldown
+        shieldTimer = shieldDuration;
 
 
         // calculate screen bounds

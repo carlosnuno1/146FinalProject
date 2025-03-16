@@ -14,6 +14,7 @@ public class PlayerBulletManager : MonoBehaviour
     public void RegisterBullet()
     {
         activeBulletCount++;
+        Debug.Log("Bullet count: " + activeBulletCount);
     }
 
     public void UnregisterBullet()
