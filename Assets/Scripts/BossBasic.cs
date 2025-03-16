@@ -134,28 +134,10 @@ public class BossEnemy : MonoBehaviour
 
         Debug.Log("Dodge: " + direction);
 
-            // Apply dodge force
-            rb.linearVelocity = direction * dodgeForce;
+        // Apply dodge force
+        rb.linearVelocity = direction * dodgeForce;
 
     }
-
-    // public void DodgeBullet()
-    // {
-    //     GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
-    //     if (bullet != null){
-    //         Vector2 bulletDirection = bullet.GetComponent<Rigidbody2D>().linearVelocity.normalized;
-    //         Vector2 bossToBullet = (bullet.transform.position - transform.position).normalized;
-    //         float dotProduct = Vector2.Dot(bulletDirection, bossToBullet);
-    //         Vector2 dodgeDirection;
-    //         if (dotProduct > 0) {
-    //             dodgeDirection = new Vector2(bulletDirection.y, -bulletDirection.x);
-    //         } else {
-    //             dodgeDirection = new Vector2(-bulletDirection.y, bulletDirection.x);
-    //         }
-    //         rb.linearVelocity = dodgeDirection * dodgeForce;
-    //     }
-    // }
-
 
     public bool DodgeStatus()
     {
