@@ -28,7 +28,7 @@ public class BossEnemy : MonoBehaviour
     private float dodgeTimer = 0f;
     private float cooldownTimer = 0f;
 
-    private Vector2 screenBounds;
+    public Vector2 screenBounds;
 
     [Header("Shield Settings")]
     public GameObject shieldObject;
@@ -147,29 +147,9 @@ public class BossEnemy : MonoBehaviour
         canDodge = false;
         dodgeTimer = dodgeDuration;
 
-        Debug.Log("Dodge: " + direction);
-
         // Apply dodge force
         rb.linearVelocity = direction * dodgeForce;
     }
-
-    // public void DodgeBullet()
-    // {
-    //     GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
-    //     if (bullet != null){
-    //         Vector2 bulletDirection = bullet.GetComponent<Rigidbody2D>().linearVelocity.normalized;
-    //         Vector2 bossToBullet = (bullet.transform.position - transform.position).normalized;
-    //         float dotProduct = Vector2.Dot(bulletDirection, bossToBullet);
-    //         Vector2 dodgeDirection;
-    //         if (dotProduct > 0) {
-    //             dodgeDirection = new Vector2(bulletDirection.y, -bulletDirection.x);
-    //         } else {
-    //             dodgeDirection = new Vector2(-bulletDirection.y, bulletDirection.x);
-    //         }
-    //         rb.linearVelocity = dodgeDirection * dodgeForce;
-    //     }
-    // }
-
 
     public bool DodgeStatus()
     {

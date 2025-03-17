@@ -125,7 +125,7 @@ public class MetricsManager : MonoBehaviour
             totalDistance += CurrentDistance;
             distanceSamples++;
             AverageDistance = distanceSamples > 0 ? totalDistance / distanceSamples : 0;
-            Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
+            // Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
             UpdateBlackBoard();
         }
     }
@@ -147,7 +147,7 @@ public class MetricsManager : MonoBehaviour
         void SetOrAddVariable<T>(string key, T value)
         {
             bool x = blackboard.SetVariableValue(key, value);
-            Debug.Log($"Set {key} to {value} and its {x}");
+            // Debug.Log($"Set {key} to {value} and its {x}");
         }
 
         SetOrAddVariable("PlayerShots", playerMetrics.Shots);
