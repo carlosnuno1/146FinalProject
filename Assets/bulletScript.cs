@@ -4,7 +4,7 @@ public class bulletScript : MonoBehaviour
 {
     public float speed = 10f;
     public int damage = 10;
-    public float lifetime = 5f;
+    public float lifetime = 2f;
 
     private Rigidbody2D rb;
     private Vector2 moveDirection;
@@ -17,6 +17,7 @@ public class bulletScript : MonoBehaviour
         {
             rb.linearVelocity = moveDirection * speed; // Apply movement to bullet
         }
+        PlayerBulletManager.Instance.RegisterBullet();
 
         Destroy(gameObject, lifetime);
     }
@@ -32,16 +33,19 @@ public class bulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<EnemyHealth>()?.TakeDamage(damage);
-            Destroy(gameObject);
-        }
-        else
-        {
-            if (other.name == "Sheild"){
+        if (other.name == "Shield"){
                 Debug.Log("Bullet hit: " + other.name);
                 Destroy(gameObject);
+                PlayerBulletManager.Instance.UnregisterBullet();
+            }
+        else
+        {
+            
+            if (other.CompareTag("Enemy"))
+            {
+                other.GetComponent<EnemyHealth>()?.TakeDamage(damage);
+                Destroy(gameObject);
+                PlayerBulletManager.Instance.UnregisterBullet();
             }
         }
     }

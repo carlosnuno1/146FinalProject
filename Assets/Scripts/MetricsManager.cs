@@ -67,6 +67,8 @@ public class Metrics
         UpdateBlackBoard();
     }
 
+    public bool AreBullets => PlayerBulletManager.Instance.BulletCount();
+
     public void PrintStats()
     {
         // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
@@ -127,6 +129,11 @@ public class MetricsManager : MonoBehaviour
             UpdateBlackBoard();
         }
     }
+
+    void Update()
+{
+    UpdateBlackBoard();  // Updates AreBullets and other variables every frame
+}
 
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/api/Unity.Behavior.BlackboardReference.html
@@ -192,5 +199,8 @@ public class MetricsManager : MonoBehaviour
 
         SetOrAddVariable("PlayerHealth", playerMetrics.Health);
         SetOrAddVariable("BossHealth", bossMetrics.Health);
+
+        SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
+
     }
 }
