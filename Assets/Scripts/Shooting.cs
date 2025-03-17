@@ -41,13 +41,18 @@ public class Shooting : MonoBehaviour
 
     void Shoot()
     {
-        if (bulletPrefab == null || bulletTransform == null) return;
+        if (bulletPrefab == null || bulletTransform == null)
+            return;
 
         // records metric
         MetricsManager.instance.playerMetrics.RecordShot();
 
         // Instantiate the bullet
-        GameObject bulletInstance = Instantiate(bulletPrefab, bulletTransform.position, Quaternion.identity);
+        GameObject bulletInstance = Instantiate(
+            bulletPrefab,
+            bulletTransform.position,
+            Quaternion.identity
+        );
 
         // Get the bullet script and set its direction
         bulletScript bulletScriptInstance = bulletInstance.GetComponent<bulletScript>();

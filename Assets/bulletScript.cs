@@ -33,14 +33,14 @@ public class bulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "Shield"){
-                Debug.Log("Bullet hit: " + other.name);
-                Destroy(gameObject);
-                PlayerBulletManager.Instance.UnregisterBullet();
-            }
+        if (other.name == "Shield")
+        {
+            Debug.Log("Bullet hit: " + other.name);
+            Destroy(gameObject);
+            PlayerBulletManager.Instance.UnregisterBullet();
+        }
         else
         {
-            
             if (other.CompareTag("Enemy"))
             {
                 other.GetComponent<EnemyHealth>()?.TakeDamage(damage);

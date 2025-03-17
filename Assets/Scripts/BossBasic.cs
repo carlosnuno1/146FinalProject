@@ -12,7 +12,7 @@ public class BossEnemy : MonoBehaviour
     private Vector2 moveDirection;
     private Rigidbody2D rb;
     private float moveTimer;
-    
+
     [Header("Shooting")]
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -31,17 +31,15 @@ public class BossEnemy : MonoBehaviour
     private Vector2 screenBounds;
 
     [Header("Shield Settings")]
-     public GameObject shieldObject;
-     public float shieldDuration = 2f;
+    public GameObject shieldObject;
+    public float shieldDuration = 2f;
 
-     private float shieldTimer;
-     private bool canShield = true;
-     private bool isShielding = false;
-
+    private float shieldTimer;
+    private bool canShield = true;
+    private bool isShielding = false;
 
     private Transform player;
     private float fireCooldown;
-
 
     void Start()
     {
@@ -50,7 +48,6 @@ public class BossEnemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         fireCooldown = fireRate; // Start at max cooldown
         shieldTimer = shieldDuration;
-
 
         // calculate screen bounds
         Camera cam = Camera.main;
@@ -69,7 +66,6 @@ public class BossEnemy : MonoBehaviour
         transform.position = new Vector2(clampedX, clampedY);
     }
 
-
     void Update()
     {
         HandleMovement();
@@ -86,8 +82,9 @@ public class BossEnemy : MonoBehaviour
 
     void HandleMovement()
     {
-        if (isDodging) return; // Don't move while dodging
-        if(Vector2.Distance(transform.position, player.position) < 5f)
+        if (isDodging)
+            return; // Don't move while dodging
+        if (Vector2.Distance(transform.position, player.position) < 5f)
         {
             rb.linearVelocity = moveDirection * moveSpeed;
         }
@@ -99,7 +96,8 @@ public class BossEnemy : MonoBehaviour
 
     void HandleShooting()
     {
-        if (player == null) return; // Prevent errors if player is destroyed
+        if (player == null)
+            return; // Prevent errors if player is destroyed
 
         fireCooldown -= Time.deltaTime;
 
@@ -112,14 +110,19 @@ public class BossEnemy : MonoBehaviour
 
     void Shoot()
     {
-        if (projectilePrefab == null || firePoint == null || player == null) return;
+        if (projectilePrefab == null || firePoint == null || player == null)
+            return;
 
         // records metric
         MetricsManager.instance.bossMetrics.RecordShot();
 
         // Instantiate the projectile
-        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        
+        GameObject projectile = Instantiate(
+            projectilePrefab,
+            firePoint.position,
+            Quaternion.identity
+        );
+
         // Get the projectile script and set direction
         EnemyProjectile projectileScript = projectile.GetComponent<EnemyProjectile>();
         if (projectileScript != null)
@@ -128,8 +131,10 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
-    public bool CanDodge(){
-        if (player == null || !canDodge || isDodging) return false;
+    public bool CanDodge()
+    {
+        if (player == null || !canDodge || isDodging)
+            return false;
         return true;
     }
 
@@ -144,9 +149,8 @@ public class BossEnemy : MonoBehaviour
 
         Debug.Log("Dodge: " + direction);
 
-            // Apply dodge force
-            rb.linearVelocity = direction * dodgeForce;
-
+        // Apply dodge force
+        rb.linearVelocity = direction * dodgeForce;
     }
 
     // public void DodgeBullet()
@@ -201,7 +205,8 @@ public class BossEnemy : MonoBehaviour
 
     public void Block()
     {
-        if (!CanBlock() || isShielding) return;
+        if (!CanBlock() || isShielding)
+            return;
 
         isShielding = true;
         shieldObject.SetActive(true);
@@ -224,14 +229,15 @@ public class BossEnemy : MonoBehaviour
             // Regenerate shield when not in use
             if (shieldTimer < shieldDuration)
             {
-                shieldTimer += Time.deltaTime/4;
+                shieldTimer += Time.deltaTime / 4;
             }
         }
     }
 
     public void StopBlock()
     {
-        if (!isShielding) return;  // Prevent multiple calls
+        if (!isShielding)
+            return; // Prevent multiple calls
 
         isShielding = false;
         shieldObject.SetActive(false);
@@ -239,7 +245,8 @@ public class BossEnemy : MonoBehaviour
         Debug.Log("Boss stopped blocking. Remaining shield time: " + shieldTimer);
     }
 
-    public bool ShieldStatus(){
+    public bool ShieldStatus()
+    {
         return isShielding;
     }
 

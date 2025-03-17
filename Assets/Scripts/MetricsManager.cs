@@ -132,7 +132,7 @@ public class MetricsManager : MonoBehaviour
 
     void Update()
     {
-        UpdateBlackBoard();  // Updates AreBullets and other variables every frame
+        UpdateBlackBoard(); // Updates AreBullets and other variables every frame
     }
 
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
@@ -199,6 +199,5 @@ public class MetricsManager : MonoBehaviour
         SetOrAddVariable("BossHealth", bossMetrics.Health);
 
         SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
-
     }
 }
