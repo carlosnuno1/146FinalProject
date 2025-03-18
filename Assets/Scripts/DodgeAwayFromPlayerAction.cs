@@ -37,34 +37,41 @@ public partial class DodgeAwayFromPlayerAction : Action
             Boss.Value.transform.position - Player.Value.transform.position
         ).normalized;
 
-        Vector2 bossPosition = Boss.Value.transform.position;
+        Debug.Log("Dodge direction: " + dodgeDirection);
 
         // Check if dodging would push the boss out of bounds
         Vector2 adjustedDodgeDirection = dodgeDirection;
 
-        if (bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce > Boss.Value.screenBounds.x)
+        Vector2 predictedPosition =
+            (Vector2)Boss.Value.transform.position
+            + (dodgeDirection * Boss.Value.dodgeForce * Boss.Value.dodgeDuration);
+
+        // float positionX = bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce;
+        // float positionY = bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce;
+
+        Debug.Log(
+            $"Position X: {predictedPosition.x}, Position Y: {predictedPosition.y}, Screen Bounds: {Boss.Value.screenBounds}"
+        );
+
+        if (predictedPosition.x > Boss.Value.screenBounds.x)
         {
             adjustedDodgeDirection.x = -Mathf.Abs(dodgeDirection.x); // Dodge left
         }
-        else if (
-            bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce
-            < -Boss.Value.screenBounds.x
-        )
+        else if (predictedPosition.x < -Boss.Value.screenBounds.x)
         {
             adjustedDodgeDirection.x = Mathf.Abs(dodgeDirection.x); // Dodge right
         }
 
-        if (bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce > Boss.Value.screenBounds.y)
+        if (predictedPosition.y > Boss.Value.screenBounds.y)
         {
             adjustedDodgeDirection.y = -Mathf.Abs(dodgeDirection.y); // Dodge down
         }
-        else if (
-            bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce
-            < -Boss.Value.screenBounds.y
-        )
+        else if (predictedPosition.y < -Boss.Value.screenBounds.y)
         {
             adjustedDodgeDirection.y = Mathf.Abs(dodgeDirection.y); // Dodge up
         }
+
+        Debug.Log(adjustedDodgeDirection);
 
         Boss.Value.Dodge(adjustedDodgeDirection);
 
@@ -75,6 +82,7 @@ public partial class DodgeAwayFromPlayerAction : Action
     {
         if (!Boss.Value.DodgeStatus())
         { // if not dodging anymore return success
+            Debug.Log(Boss.Value.transform.position);
             return Status.Success;
         }
         return Status.Running;

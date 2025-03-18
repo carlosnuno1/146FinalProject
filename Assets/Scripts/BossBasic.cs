@@ -49,13 +49,8 @@ public class BossEnemy : MonoBehaviour
         fireCooldown = fireRate; // Start at max cooldown
         shieldTimer = shieldDuration;
 
-        // calculate screen bounds
-        Camera cam = Camera.main;
-
-        Vector2 screenMin = cam.ViewportToWorldPoint(new Vector3(0, 0, 0)); // Bottom-left corner
-        Vector2 screenMax = cam.ViewportToWorldPoint(new Vector3(1, 1, 0)); // Top-right corner
-
-        screenBounds = new Vector2(screenMax.x, screenMax.y);
+        // set screen bounds
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 
     private void ClampPosition()

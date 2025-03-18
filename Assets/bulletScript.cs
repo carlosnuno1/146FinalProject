@@ -9,6 +9,8 @@ public class bulletScript : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveDirection;
 
+    public Vector2 screenBounds;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,7 +21,24 @@ public class bulletScript : MonoBehaviour
         }
         PlayerBulletManager.Instance.RegisterBullet();
 
-        Destroy(gameObject, lifetime);
+        // set screen bounds
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
+
+    public void Update()
+    {
+        lifetime -= Time.deltaTime;
+        if (
+            lifetime <= 0
+            || transform.position.x > screenBounds.x
+            || transform.position.x < -screenBounds.x
+            || transform.position.y > screenBounds.y
+            || transform.position.y < -screenBounds.y
+        )
+        {
+            PlayerBulletManager.Instance.UnregisterBullet();
+            Destroy(gameObject);
+        }
     }
 
     public void SetDirection(Vector2 direction)
