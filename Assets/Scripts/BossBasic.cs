@@ -126,6 +126,22 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    public Vector2 CalculateRepulsionForce(float threshold, float repulsionStrength)
+    {
+        Vector2 repulsionForce = Vector2.zero;
+
+        if (transform.position.x > screenBounds.x - threshold)
+            repulsionForce.x -= repulsionStrength; // Push left
+        if (transform.position.x < -screenBounds.x + threshold)
+            repulsionForce.x += repulsionStrength; // Push right
+        if (transform.position.y > screenBounds.y - threshold)
+            repulsionForce.y -= repulsionStrength; // Push down
+        if (transform.position.y < -screenBounds.y + threshold)
+            repulsionForce.y += repulsionStrength; // Push up
+
+        return repulsionForce;
+    }
+
     public bool CanDodge()
     {
         if (player == null || !canDodge || isDodging)

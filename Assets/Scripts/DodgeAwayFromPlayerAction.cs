@@ -33,8 +33,24 @@ public partial class DodgeAwayFromPlayerAction : Action
         }
 
         Vector2 dodgeDirection;
-        dodgeDirection = (
+        // dodgeDirection = (
+        //     Boss.Value.transform.position - Player.Value.transform.position
+        // ).normalized;
+
+        Vector2 baseDodgeDirection = (
             Boss.Value.transform.position - Player.Value.transform.position
+        ).normalized;
+
+        Debug.Log("Dodge direction: " + baseDodgeDirection);
+
+        // Generate a random angle between -90 and 90 degrees
+        float randomAngle = UnityEngine.Random.Range(-45f, 45f);
+
+        Vector2 repulsionForce = Boss.Value.CalculateRepulsionForce(1, 1.5f);
+
+        // Rotate the base direction by the random angle
+        dodgeDirection = (
+            (Vector2)(Quaternion.Euler(0, 0, randomAngle) * baseDodgeDirection) + repulsionForce
         ).normalized;
 
         Debug.Log("Dodge direction: " + dodgeDirection);
@@ -44,36 +60,38 @@ public partial class DodgeAwayFromPlayerAction : Action
 
         Vector2 predictedPosition =
             (Vector2)Boss.Value.transform.position
-            + (dodgeDirection * Boss.Value.dodgeForce * Boss.Value.dodgeDuration);
+            + (Boss.Value.dodgeDuration * Boss.Value.dodgeForce * dodgeDirection);
 
-        // float positionX = bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce;
-        // float positionY = bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce;
+        Boss.Value.Dodge(dodgeDirection);
 
-        Debug.Log(
-            $"Position X: {predictedPosition.x}, Position Y: {predictedPosition.y}, Screen Bounds: {Boss.Value.screenBounds}"
-        );
+        // // float positionX = bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce;
+        // // float positionY = bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce;
 
-        if (predictedPosition.x > Boss.Value.screenBounds.x)
-        {
-            adjustedDodgeDirection.x = -Mathf.Abs(dodgeDirection.x); // Dodge left
-        }
-        else if (predictedPosition.x < -Boss.Value.screenBounds.x)
-        {
-            adjustedDodgeDirection.x = Mathf.Abs(dodgeDirection.x); // Dodge right
-        }
+        // Debug.Log(
+        //     $"Position X: {predictedPosition.x}, Position Y: {predictedPosition.y}, Screen Bounds: {Boss.Value.screenBounds}"
+        // );
 
-        if (predictedPosition.y > Boss.Value.screenBounds.y)
-        {
-            adjustedDodgeDirection.y = -Mathf.Abs(dodgeDirection.y); // Dodge down
-        }
-        else if (predictedPosition.y < -Boss.Value.screenBounds.y)
-        {
-            adjustedDodgeDirection.y = Mathf.Abs(dodgeDirection.y); // Dodge up
-        }
+        // if (predictedPosition.x > Boss.Value.screenBounds.x)
+        // {
+        //     adjustedDodgeDirection.x = -Mathf.Abs(dodgeDirection.x); // Dodge left
+        // }
+        // else if (predictedPosition.x < -Boss.Value.screenBounds.x)
+        // {
+        //     adjustedDodgeDirection.x = Mathf.Abs(dodgeDirection.x); // Dodge right
+        // }
 
-        Debug.Log(adjustedDodgeDirection);
+        // if (predictedPosition.y > Boss.Value.screenBounds.y)
+        // {
+        //     adjustedDodgeDirection.y = -Mathf.Abs(dodgeDirection.y); // Dodge down
+        // }
+        // else if (predictedPosition.y < -Boss.Value.screenBounds.y)
+        // {
+        //     adjustedDodgeDirection.y = Mathf.Abs(dodgeDirection.y); // Dodge up
+        // }
 
-        Boss.Value.Dodge(adjustedDodgeDirection);
+        // Debug.Log(adjustedDodgeDirection);
+
+        // Boss.Value.Dodge(adjustedDodgeDirection);
 
         return Status.Running;
     }
