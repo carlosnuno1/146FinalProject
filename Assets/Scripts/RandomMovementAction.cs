@@ -16,6 +16,10 @@ public partial class RandomMovementAction : Action
     private Vector2 randomPos;
     protected override Status OnStart()
     {
+        if(BossEnemy.Value.randomMove)
+        {
+            return Status.Failure; // Stops early if already randomly moving
+        }
         background = GameObject.Find("background").transform;
         pos = background.position;
         scale = background.localScale;

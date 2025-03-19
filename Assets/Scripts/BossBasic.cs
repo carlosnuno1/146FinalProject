@@ -133,9 +133,10 @@ public class BossEnemy : MonoBehaviour
         }
         else if (randomMove)
         { // Move randomly
-            if ((Vector2)transform.position == movePosition)
+            if (Vector2.Distance((Vector2)transform.position, movePosition) < 0.5f)
             {
                 randomMove = false;
+                rb.linearVelocity = Vector2.zero;
                 return; // Finished moving to the random position
             }
             moveDirection = (movePosition - (Vector2)transform.position).normalized;
