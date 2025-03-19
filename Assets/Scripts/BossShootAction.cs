@@ -21,6 +21,9 @@ public partial class BossShootAction : Action
     private GameManager gameManager;
     private float lastKnownResetCount = -1;
 
+    private const int SHOTS_BEFORE_SUCCESS = 2;
+    private int shotsFired = 0;
+
     protected override Status OnStart()
     {
         if (Player.Value == null)
@@ -51,15 +54,28 @@ public partial class BossShootAction : Action
         fireCooldown = Firerate.Value;
         bulletPoint = Boss.Value.transform.Find("FirePoint");
         
+        shotsFired = 0;  // Reset shot counter when starting
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
         // First check if boss or player is destroyed/null
-        if (Boss.Value == null || Player.Value == null)
+        if (Boss.Value == null)
         {
             return Status.Failure;
+        }
+
+        if (Player.Value == null)
+        {
+            return Status.Success;
+        }
+
+        // Check if we've fired enough shots
+        if (shotsFired >= SHOTS_BEFORE_SUCCESS)
+        {
+            shotsFired = 0;  // Reset for next time
+            return Status.Success;
         }
 
         // Check if we need to reapply difficulty scaling
@@ -81,7 +97,8 @@ public partial class BossShootAction : Action
 
     }
 
-    void handleShooting(){
+    void handleShooting()
+    {
         if (Player.Value == null)
         {
             Debug.LogError("Player is not set");
@@ -94,6 +111,7 @@ public partial class BossShootAction : Action
         {
             Shoot();
             fireCooldown = Firerate.Value;
+            shotsFired++;
         }
     }
 
