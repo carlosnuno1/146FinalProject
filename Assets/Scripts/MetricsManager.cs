@@ -67,9 +67,11 @@ public class Metrics
         UpdateBlackBoard();
     }
 
-    public void PrintStats()
+    public bool AreBullets => PlayerBulletManager.Instance.BulletCount();
+
+    public string PrintStats()
     {
-        // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
+        return $"{_name} Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}";
     }
 }
 
@@ -123,9 +125,14 @@ public class MetricsManager : MonoBehaviour
             totalDistance += CurrentDistance;
             distanceSamples++;
             AverageDistance = distanceSamples > 0 ? totalDistance / distanceSamples : 0;
-            Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
+            // Debug.Log($"CurrentDistance: {CurrentDistance} \n AverageDistance: {AverageDistance}");
             UpdateBlackBoard();
         }
+    }
+
+    void Update()
+    {
+        UpdateBlackBoard(); // Updates AreBullets and other variables every frame
     }
 
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
@@ -139,10 +146,8 @@ public class MetricsManager : MonoBehaviour
 
         void SetOrAddVariable<T>(string key, T value)
         {
-            if (!blackboard.SetVariableValue(key, value))
-            {
-                blackboard.AddVariable(key, value);
-            }
+            bool x = blackboard.SetVariableValue(key, value);
+            // Debug.Log($"Set {key} to {value} and its {x}");
         }
 
         SetOrAddVariable("PlayerShots", playerMetrics.Shots);
@@ -192,5 +197,15 @@ public class MetricsManager : MonoBehaviour
 
         SetOrAddVariable("PlayerHealth", playerMetrics.Health);
         SetOrAddVariable("BossHealth", bossMetrics.Health);
+
+        SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
+    }
+
+    public string PrintStats()
+    {
+        string playerStats = playerMetrics.PrintStats();
+        string bossStats = bossMetrics.PrintStats();
+        string distanceStats = $"Average Distance: {AverageDistance}";
+        return $"{playerStats} \n {bossStats} \n {distanceStats}";
     }
 }

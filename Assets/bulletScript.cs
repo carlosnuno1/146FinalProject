@@ -4,10 +4,12 @@ public class bulletScript : MonoBehaviour
 {
     public float speed = 10f;
     public int damage = 10;
-    public float lifetime = 5f;
+    public float lifetime = 2f;
 
     private Rigidbody2D rb;
     private Vector2 moveDirection;
+
+    public Vector2 screenBounds;
 
     void Start()
     {
@@ -17,8 +19,26 @@ public class bulletScript : MonoBehaviour
         {
             rb.linearVelocity = moveDirection * speed; // Apply movement to bullet
         }
+        PlayerBulletManager.Instance.RegisterBullet();
 
-        Destroy(gameObject, lifetime);
+        // set screen bounds
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
+
+    public void Update()
+    {
+        lifetime -= Time.deltaTime;
+        if (
+            lifetime <= 0
+            || transform.position.x > screenBounds.x
+            || transform.position.x < -screenBounds.x
+            || transform.position.y > screenBounds.y
+            || transform.position.y < -screenBounds.y
+        )
+        {
+            PlayerBulletManager.Instance.UnregisterBullet();
+            Destroy(gameObject);
+        }
     }
 
     public void SetDirection(Vector2 direction)
@@ -32,16 +52,19 @@ public class bulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.name == "Shield")
         {
-            other.GetComponent<EnemyHealth>()?.TakeDamage(damage);
+            Debug.Log("Bullet hit: " + other.name);
             Destroy(gameObject);
+            PlayerBulletManager.Instance.UnregisterBullet();
         }
         else
         {
-            if (other.name == "Sheild"){
-                Debug.Log("Bullet hit: " + other.name);
+            if (other.CompareTag("Enemy"))
+            {
+                other.GetComponent<EnemyHealth>()?.TakeDamage(damage);
                 Destroy(gameObject);
+                PlayerBulletManager.Instance.UnregisterBullet();
             }
         }
     }

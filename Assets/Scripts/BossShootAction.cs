@@ -18,6 +18,12 @@ public partial class BossShootAction : Action
     private float fireCooldown;
     private Transform bulletPoint;
 
+    private GameManager gameManager;
+    private float lastKnownResetCount = -1;
+
+    private const int SHOTS_BEFORE_SUCCESS = 2;
+    private int shotsFired = 0;
+
     protected override Status OnStart()
     {
         if (Player.Value == null)
@@ -31,15 +37,57 @@ public partial class BossShootAction : Action
             Debug.LogError("Self is not set");
             return Status.Failure;
         }
+
+        // Get GameManager reference
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        if (gameManager != null)
+        {
+            // Initialize base values if not already done
+            gameManager.InitializeBaseValues(Firerate.Value, Bulletspeed.Value);
+            
+            // Apply difficulty scaling
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            Firerate.Value = scaledFireRate;
+            Bulletspeed.Value = scaledBulletSpeed;
+        }
+        
         fireCooldown = Firerate.Value;
         bulletPoint = Boss.Value.transform.Find("FirePoint");
         
-        
+        shotsFired = 0;  // Reset shot counter when starting
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
+        // First check if boss or player is destroyed/null
+        if (Boss.Value == null)
+        {
+            return Status.Failure;
+        }
+
+        if (Player.Value == null)
+        {
+            return Status.Success;
+        }
+
+        // Check if we've fired enough shots
+        if (shotsFired >= SHOTS_BEFORE_SUCCESS)
+        {
+            shotsFired = 0;  // Reset for next time
+            return Status.Success;
+        }
+
+        // Check if we need to reapply difficulty scaling
+        if (gameManager != null && gameManager.resetCount != lastKnownResetCount)
+        {
+            lastKnownResetCount = gameManager.resetCount;
+            // Apply difficulty scaling
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            Firerate.Value = scaledFireRate;
+            Bulletspeed.Value = scaledBulletSpeed;
+        }
+
         handleShooting();
         return Status.Running;
     }
@@ -49,7 +97,8 @@ public partial class BossShootAction : Action
 
     }
 
-    void handleShooting(){
+    void handleShooting()
+    {
         if (Player.Value == null)
         {
             Debug.LogError("Player is not set");
@@ -62,12 +111,12 @@ public partial class BossShootAction : Action
         {
             Shoot();
             fireCooldown = Firerate.Value;
+            shotsFired++;
         }
     }
 
     void Shoot()
     {
-
         if (Bulletprefab.Value == null){
             Debug.Log("Bulletprefab is null");
             return;
@@ -88,7 +137,9 @@ public partial class BossShootAction : Action
         EnemyProjectile projectileScript = projectile.GetComponent<EnemyProjectile>();
         if (projectileScript != null)
         {
-            projectileScript.SetDirection((Player.Value.transform.position - bulletPoint.position).normalized);
+            Vector3 direction = (Player.Value.transform.position - bulletPoint.position).normalized;
+            projectileScript.SetDirection(direction);
+            projectileScript.speed = Bulletspeed.Value;
         }
     }
 }

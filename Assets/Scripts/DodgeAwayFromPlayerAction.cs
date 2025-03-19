@@ -31,33 +31,67 @@ public partial class DodgeAwayFromPlayerAction : Action
         {
             return Status.Failure;
         }
-        GameObject bullet = GameObject.FindGameObjectWithTag("Bullet");
-        Debug.Log("Bullet: " + bullet);
-        Vector2 dodgeDirection;
-        if (bullet != null)
-        {
-            Vector2 bulletDirection = bullet.GetComponent<Rigidbody2D>().linearVelocity.normalized;
-            Vector2 bossToBullet = (
-                bullet.transform.position - Boss.Value.transform.position
-            ).normalized;
-            float dotProduct = Vector2.Dot(bulletDirection, bossToBullet);
 
-            if (dotProduct > 0)
-            {
-                dodgeDirection = new Vector2(bulletDirection.y, -bulletDirection.x);
-            }
-            else
-            {
-                dodgeDirection = new Vector2(-bulletDirection.y, bulletDirection.x);
-            }
-        }
-        else
-        {
-            dodgeDirection = (
-                Boss.Value.transform.position - Player.Value.transform.position
-            ).normalized;
-        }
+        Vector2 dodgeDirection;
+        // dodgeDirection = (
+        //     Boss.Value.transform.position - Player.Value.transform.position
+        // ).normalized;
+
+        Vector2 baseDodgeDirection = (
+            Boss.Value.transform.position - Player.Value.transform.position
+        ).normalized;
+
+        Debug.Log("Dodge direction: " + baseDodgeDirection);
+
+        // Generate a random angle between -90 and 90 degrees
+        float randomAngle = UnityEngine.Random.Range(-45f, 45f);
+
+        Vector2 repulsionForce = Boss.Value.CalculateRepulsionForce(1, 1.5f);
+
+        // Rotate the base direction by the random angle
+        dodgeDirection = (
+            (Vector2)(Quaternion.Euler(0, 0, randomAngle) * baseDodgeDirection) + repulsionForce
+        ).normalized;
+
+        Debug.Log("Dodge direction: " + dodgeDirection);
+
+        // Check if dodging would push the boss out of bounds
+        Vector2 adjustedDodgeDirection = dodgeDirection;
+
+        Vector2 predictedPosition =
+            (Vector2)Boss.Value.transform.position
+            + (Boss.Value.dodgeDuration * Boss.Value.dodgeForce * dodgeDirection);
+
         Boss.Value.Dodge(dodgeDirection);
+
+        // // float positionX = bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce;
+        // // float positionY = bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce;
+
+        // Debug.Log(
+        //     $"Position X: {predictedPosition.x}, Position Y: {predictedPosition.y}, Screen Bounds: {Boss.Value.screenBounds}"
+        // );
+
+        // if (predictedPosition.x > Boss.Value.screenBounds.x)
+        // {
+        //     adjustedDodgeDirection.x = -Mathf.Abs(dodgeDirection.x); // Dodge left
+        // }
+        // else if (predictedPosition.x < -Boss.Value.screenBounds.x)
+        // {
+        //     adjustedDodgeDirection.x = Mathf.Abs(dodgeDirection.x); // Dodge right
+        // }
+
+        // if (predictedPosition.y > Boss.Value.screenBounds.y)
+        // {
+        //     adjustedDodgeDirection.y = -Mathf.Abs(dodgeDirection.y); // Dodge down
+        // }
+        // else if (predictedPosition.y < -Boss.Value.screenBounds.y)
+        // {
+        //     adjustedDodgeDirection.y = Mathf.Abs(dodgeDirection.y); // Dodge up
+        // }
+
+        // Debug.Log(adjustedDodgeDirection);
+
+        // Boss.Value.Dodge(adjustedDodgeDirection);
 
         return Status.Running;
     }
@@ -66,6 +100,7 @@ public partial class DodgeAwayFromPlayerAction : Action
     {
         if (!Boss.Value.DodgeStatus())
         { // if not dodging anymore return success
+            Debug.Log(Boss.Value.transform.position);
             return Status.Success;
         }
         return Status.Running;

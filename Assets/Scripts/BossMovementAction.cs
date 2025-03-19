@@ -1,15 +1,23 @@
 using System;
 using Unity.Behavior;
+using Unity.Properties;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
-using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "Boss Movement", story: "[Boss] Moves Away From [Player]", category: "Action", id: "c143b56b32a897157d19aeeec13d7047")]
+[NodeDescription(
+    name: "Boss Movement",
+    story: "[Boss] Moves Away From [Player]",
+    category: "Action",
+    id: "c143b56b32a897157d19aeeec13d7047"
+)]
 public partial class BossMovementAction : Action
 {
-    [SerializeReference] public BlackboardVariable<BossEnemy> Boss;
-    [SerializeReference] public BlackboardVariable<GameObject> Player;
+    [SerializeReference]
+    public BlackboardVariable<BossEnemy> Boss;
+
+    [SerializeReference]
+    public BlackboardVariable<GameObject> Player;
 
     protected override Status OnStart()
     {
@@ -19,8 +27,10 @@ public partial class BossMovementAction : Action
             return Status.Failure;
         }
 
-        Vector2 moveAwayDirection = (Boss.Value.transform.position - Player.Value.transform.position).normalized;
-        
+        Vector2 moveAwayDirection = (
+            Boss.Value.transform.position - Player.Value.transform.position
+        ).normalized;
+
         Boss.Value.SetMoveDirection(moveAwayDirection);
 
         return Status.Running;
@@ -31,8 +41,5 @@ public partial class BossMovementAction : Action
         return Status.Success;
     }
 
-    protected override void OnEnd()
-    {
-    }
+    protected override void OnEnd() { }
 }
-
