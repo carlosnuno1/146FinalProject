@@ -104,7 +104,8 @@ public class BossEnemy : MonoBehaviour
             return; // Don't move while dodging or blocking
         if (Vector2.Distance(transform.position, player.position) < 5f)
         {   // Move away from player
-            rb.linearVelocity = moveDirection * moveSpeed;
+            moveDirection = ((Vector2)transform.position - (Vector2)player.position);
+            rb.linearVelocity = moveDirection * moveSpeed * 0.5f;
             randomMove = false; // Interrupts random movement
         }
         else if(randomMove)
