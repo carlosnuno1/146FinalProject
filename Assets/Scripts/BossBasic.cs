@@ -103,14 +103,14 @@ public class BossEnemy : MonoBehaviour
         if (isDodging || isShielding)
             return; // Don't move while dodging or blocking
         if (Vector2.Distance(transform.position, player.position) < 5f)
-        {   // Move away from player
+        { // Move away from player
             moveDirection = ((Vector2)transform.position - (Vector2)player.position);
             rb.linearVelocity = moveDirection * moveSpeed * 0.5f;
             randomMove = false; // Interrupts random movement
         }
-        else if(randomMove)
-        {   // Move randomly
-            if((Vector2)transform.position == movePosition)
+        else if (randomMove)
+        { // Move randomly
+            if ((Vector2)transform.position == movePosition)
             {
                 randomMove = false;
                 return; // Finished moving to the random position
@@ -119,26 +119,31 @@ public class BossEnemy : MonoBehaviour
             rb.linearVelocity = moveDirection * moveSpeed;
         }
         else
-        {   // No movement
+        { // No movement
             rb.linearVelocity = Vector2.zero;
         }
     }
 
-    void HandleShooting()
+    public bool CanShoot()
+    {
+        return fireCooldown < 0f;
+    }
+
+    public void HandleShooting()
     {
         if (player == null)
             return; // Prevent errors if player is destroyed
 
         fireCooldown -= Time.deltaTime;
 
-        if (fireCooldown <= 0f)
+        if (CanShoot())
         {
             Shoot();
             fireCooldown = fireRate; // Reset cooldown
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
         if (projectilePrefab == null || firePoint == null || player == null)
             return;

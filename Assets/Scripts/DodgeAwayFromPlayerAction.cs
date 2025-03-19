@@ -64,35 +64,6 @@ public partial class DodgeAwayFromPlayerAction : Action
 
         Boss.Value.Dodge(dodgeDirection);
 
-        // // float positionX = bossPosition.x + dodgeDirection.x * Boss.Value.dodgeForce;
-        // // float positionY = bossPosition.y + dodgeDirection.y * Boss.Value.dodgeForce;
-
-        // Debug.Log(
-        //     $"Position X: {predictedPosition.x}, Position Y: {predictedPosition.y}, Screen Bounds: {Boss.Value.screenBounds}"
-        // );
-
-        // if (predictedPosition.x > Boss.Value.screenBounds.x)
-        // {
-        //     adjustedDodgeDirection.x = -Mathf.Abs(dodgeDirection.x); // Dodge left
-        // }
-        // else if (predictedPosition.x < -Boss.Value.screenBounds.x)
-        // {
-        //     adjustedDodgeDirection.x = Mathf.Abs(dodgeDirection.x); // Dodge right
-        // }
-
-        // if (predictedPosition.y > Boss.Value.screenBounds.y)
-        // {
-        //     adjustedDodgeDirection.y = -Mathf.Abs(dodgeDirection.y); // Dodge down
-        // }
-        // else if (predictedPosition.y < -Boss.Value.screenBounds.y)
-        // {
-        //     adjustedDodgeDirection.y = Mathf.Abs(dodgeDirection.y); // Dodge up
-        // }
-
-        // Debug.Log(adjustedDodgeDirection);
-
-        // Boss.Value.Dodge(adjustedDodgeDirection);
-
         return Status.Running;
     }
 

@@ -95,6 +95,10 @@ public class MetricsManager : MonoBehaviour
 
     public static MetricsManager instance { get; private set; }
 
+    public float DODGEWEIGHT = 0.5f;
+    public float SHOOTWEIGHT = 0.5f;
+    public float MOVEWEIGHT = 0.5f;
+
     [SerializeField]
     private BehaviorGraphAgent behaviorGraphAgent;
 
@@ -133,6 +137,25 @@ public class MetricsManager : MonoBehaviour
     void Update()
     {
         UpdateBlackBoard(); // Updates AreBullets and other variables every frame
+    }
+
+    public void AdjustWeights()
+    {
+        float playerShotAccuracy =
+            playerMetrics.Shots > 0
+                ? (float)playerMetrics.SuccessfulShots / playerMetrics.Shots
+                : 0;
+        float playerBlockAccuracy =
+            playerMetrics.Blocks > 0
+                ? (float)playerMetrics.SuccessfulBlocks / playerMetrics.Blocks
+                : 0;
+        float playerMovement = AverageDistance / Screen.width;
+
+        SHOOTWEIGHT = playerShotAccuracy != 0 ? playerShotAccuracy : Random.Range(0.1f, 0.9f);
+        DODGEWEIGHT = playerBlockAccuracy != 0 ? playerBlockAccuracy : Random.Range(0.1f, 0.9f);
+        MOVEWEIGHT = playerMovement != 0 ? playerMovement : Random.Range(0.1f, 0.9f);
+
+        UpdateBlackBoard();
     }
 
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
@@ -199,6 +222,10 @@ public class MetricsManager : MonoBehaviour
         SetOrAddVariable("BossHealth", bossMetrics.Health);
 
         SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
+
+        SetOrAddVariable("DodgeWeight", DODGEWEIGHT);
+        SetOrAddVariable("ShootWeight", SHOOTWEIGHT);
+        SetOrAddVariable("MoveWeight", MOVEWEIGHT);
     }
 
     public string PrintStats()
