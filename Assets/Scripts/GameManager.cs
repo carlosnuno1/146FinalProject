@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviour
         boss.GetComponent<BossEnemy>().ResetToInitialState();
         boss.GetComponent<EnemyHealth>().Reset();
 
+        MetricsManager.instance.Reset();
+
         displayPanel.SetActive(false);
     }
 

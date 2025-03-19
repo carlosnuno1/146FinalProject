@@ -158,6 +158,17 @@ public class MetricsManager : MonoBehaviour
         UpdateBlackBoard();
     }
 
+    public void Reset()
+    {
+        playerMetrics = new Metrics("Player");
+        bossMetrics = new Metrics("Boss");
+        totalDistance = 0;
+        distanceSamples = 0;
+        CurrentDistance = 0;
+        AverageDistance = 0;
+        UpdateBlackBoard();
+    }
+
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/manual/blackboard-variables.html
     // https://docs.unity3d.com/Packages/com.unity.behavior@1.0/api/Unity.Behavior.BlackboardReference.html
     public void UpdateBlackBoard()
