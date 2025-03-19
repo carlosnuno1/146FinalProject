@@ -50,62 +50,24 @@ public partial class BossShootAction : Action
 
         if (Boss.Value == null)
         {
-            Debug.LogError("Self is not set");
+            Debug.LogError("Boss is not set");
             return Status.Failure;
         }
 
-        // Get GameManager reference
-        gameManager = GameObject.FindAnyObjectByType<GameManager>();
-        if (gameManager != null)
+        BossEnemy bossComponent = Boss.Value.GetComponent<BossEnemy>();
+        if (bossComponent == null)
         {
-            // Initialize base values if not already done
-            gameManager.InitializeBaseValues(Firerate.Value, Bulletspeed.Value);
-
-            // Apply difficulty scaling
-            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
-            Firerate.Value = scaledFireRate;
-            Bulletspeed.Value = scaledBulletSpeed;
+            Debug.LogError("BossEnemy component not found");
+            return Status.Failure;
         }
 
-        fireCooldown = Firerate.Value;
-        bulletPoint = Boss.Value.transform.Find("FirePoint");
-
-        shotsFired = 0; // Reset shot counter when starting
-        return Status.Running;
+        bossComponent.Shoot();
+        return Status.Success;
     }
 
     protected override Status OnUpdate()
     {
-        // First check if boss or player is destroyed/null
-        if (Boss.Value == null)
-        {
-            return Status.Failure;
-        }
-
-        if (Player.Value == null)
-        {
-            return Status.Success;
-        }
-
-        // Check if we've fired enough shots
-        if (shotsFired >= SHOTS_BEFORE_SUCCESS)
-        {
-            shotsFired = 0; // Reset for next time
-            return Status.Success;
-        }
-
-        // Check if we need to reapply difficulty scaling
-        if (gameManager != null && gameManager.resetCount != lastKnownResetCount)
-        {
-            lastKnownResetCount = gameManager.resetCount;
-            // Apply difficulty scaling
-            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
-            Firerate.Value = scaledFireRate;
-            Bulletspeed.Value = scaledBulletSpeed;
-        }
-
-        handleShooting();
-        return Status.Running;
+        return Status.Success;
     }
 
     protected override void OnEnd() { }

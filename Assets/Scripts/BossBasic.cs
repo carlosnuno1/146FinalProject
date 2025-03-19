@@ -20,6 +20,9 @@ public class BossEnemy : MonoBehaviour
     public Transform firePoint;
     public float fireRate = 2f; // Seconds between shots
     public float projectileSpeed = 5f;
+    private float fireCooldown;
+    private GameManager gameManager;
+    private float lastKnownResetCount = -1;
 
     [Header("Dodging")]
     public float dodgeForce = 15f;
@@ -41,7 +44,6 @@ public class BossEnemy : MonoBehaviour
     private bool isShielding = false;
 
     private Transform player;
-    private float fireCooldown;
 
     void Start()
     {
@@ -53,6 +55,17 @@ public class BossEnemy : MonoBehaviour
 
         // set screen bounds
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        gameManager = GameObject.FindAnyObjectByType<GameManager>();
+        if (gameManager != null)
+        {
+            // Initialize base values
+            gameManager.InitializeBaseValues(fireRate, projectileSpeed);
+            // Apply initial scaling
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            fireRate = scaledFireRate;
+            projectileSpeed = scaledBulletSpeed;
+        }
     }
 
     private void ClampPosition()
@@ -82,10 +95,19 @@ public class BossEnemy : MonoBehaviour
     void Update()
     {
         HandleMovement();
-        // HandleShooting();
+        HandleShooting();
         UpdateDodgeState();
         ClampPosition();
         UpdateBlockState();
+
+        // Check if we need to reapply difficulty scaling
+        if (gameManager != null && gameManager.resetCount != lastKnownResetCount)
+        {
+            lastKnownResetCount = gameManager.resetCount;
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            fireRate = scaledFireRate;
+            projectileSpeed = scaledBulletSpeed;
+        }
     }
 
     public void SetMoveDirection(Vector2 direction)
@@ -132,15 +154,9 @@ public class BossEnemy : MonoBehaviour
     public void HandleShooting()
     {
         if (player == null)
-            return; // Prevent errors if player is destroyed
+            return;
 
         fireCooldown -= Time.deltaTime;
-
-        if (CanShoot())
-        {
-            Shoot();
-            fireCooldown = fireRate; // Reset cooldown
-        }
     }
 
     public void Shoot()
@@ -148,22 +164,27 @@ public class BossEnemy : MonoBehaviour
         if (projectilePrefab == null || firePoint == null || player == null)
             return;
 
+        if (fireCooldown > 0)
+            return;
+
         // records metric
         MetricsManager.instance.bossMetrics.RecordShot();
 
-        // Instantiate the projectile
         GameObject projectile = Instantiate(
             projectilePrefab,
             firePoint.position,
             Quaternion.identity
         );
 
-        // Get the projectile script and set direction
         EnemyProjectile projectileScript = projectile.GetComponent<EnemyProjectile>();
         if (projectileScript != null)
         {
-            projectileScript.SetDirection((player.position - firePoint.position).normalized);
+            Vector3 direction = (player.position - firePoint.position).normalized;
+            projectileScript.SetDirection(direction);
+            projectileScript.speed = projectileSpeed;
         }
+
+        fireCooldown = fireRate;
     }
 
     public Vector2 CalculateRepulsionForce(float threshold, float repulsionStrength)
