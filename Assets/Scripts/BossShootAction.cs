@@ -56,6 +56,12 @@ public partial class BossShootAction : Action
 
     protected override Status OnUpdate()
     {
+        // First check if boss or player is destroyed/null
+        if (Boss.Value == null || Player.Value == null)
+        {
+            return Status.Failure;
+        }
+
         // Check if we need to reapply difficulty scaling
         if (gameManager != null && gameManager.resetCount != lastKnownResetCount)
         {
