@@ -27,6 +27,12 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void Reset()
+    {
+        currentHealth = maxHealth;
+        MetricsManager.instance.playerMetrics.RecordHealth(currentHealth);
+    }
+
     public void Heal(int amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -5,6 +6,8 @@ public class EnemyHealth : MonoBehaviour
     [Header("Health Settings")]
     public int maxHealth = 50;
     private int currentHealth;
+
+    public Action OnBossDefeated;
 
     void Start()
     {
@@ -25,12 +28,18 @@ public class EnemyHealth : MonoBehaviour
         {
             Die();
         }
+    }
 
+    public void Reset()
+    {
+        currentHealth = maxHealth;
+        MetricsManager.instance.bossMetrics.RecordHealth(currentHealth);
     }
 
     void Die()
     {
         Debug.Log("Enemy defeated!");
-        Destroy(gameObject); // Removes enemy from scene
+        gameObject.SetActive(false); // Removes enemy from scene
+        OnBossDefeated?.Invoke();
     }
 }

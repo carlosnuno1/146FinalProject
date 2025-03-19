@@ -69,9 +69,9 @@ public class Metrics
 
     public bool AreBullets => PlayerBulletManager.Instance.BulletCount();
 
-    public void PrintStats()
+    public string PrintStats()
     {
-        // Debug.Log($"{_name} \n Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}");
+        return $"{_name} Shots: {SuccessfulShots}/{Shots}, Dodges: {SuccessfulDodges}/{Dodges}, Blocks: {SuccessfulBlocks}/{Blocks}";
     }
 }
 
@@ -199,5 +199,13 @@ public class MetricsManager : MonoBehaviour
         SetOrAddVariable("BossHealth", bossMetrics.Health);
 
         SetOrAddVariable("AreBullets", playerMetrics.AreBullets);
+    }
+
+    public string PrintStats()
+    {
+        string playerStats = playerMetrics.PrintStats();
+        string bossStats = bossMetrics.PrintStats();
+        string distanceStats = $"Average Distance: {AverageDistance}";
+        return $"{playerStats} \n {bossStats} \n {distanceStats}";
     }
 }

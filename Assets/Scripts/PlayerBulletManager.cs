@@ -27,4 +27,9 @@ public class PlayerBulletManager : MonoBehaviour
     {
         return activeBulletCount > 0;
     }
+
+    public void Reset()
+    {
+        activeBulletCount = 0;
+    }
 }

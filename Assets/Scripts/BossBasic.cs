@@ -11,6 +11,7 @@ public class BossEnemy : MonoBehaviour
     private Vector2 startPosition;
     private Vector2 moveDirection;
     private Rigidbody2D rb;
+
     private float moveTimer;
 
     [Header("Shooting")]
@@ -59,6 +60,22 @@ public class BossEnemy : MonoBehaviour
         float clampedY = Mathf.Clamp(transform.position.y, -screenBounds.y, screenBounds.y);
 
         transform.position = new Vector2(clampedX, clampedY);
+    }
+
+    public void ResetToInitialState()
+    {
+        transform.position = startPosition;
+        rb.linearVelocity = Vector2.zero;
+        moveTimer = 0f;
+        canDodge = true;
+        isDodging = false;
+        dodgeTimer = 0f;
+        cooldownTimer = 0f;
+        canShield = true;
+        isShielding = false;
+        shieldTimer = shieldDuration;
+        fireCooldown = fireRate;
+        gameObject.SetActive(true);
     }
 
     void Update()
