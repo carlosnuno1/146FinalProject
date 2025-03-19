@@ -18,6 +18,9 @@ public partial class BossShootAction : Action
     private float fireCooldown;
     private Transform bulletPoint;
 
+    private GameManager gameManager;
+    private float lastKnownResetCount = -1;
+
     protected override Status OnStart()
     {
         if (Player.Value == null)
@@ -31,15 +34,38 @@ public partial class BossShootAction : Action
             Debug.LogError("Self is not set");
             return Status.Failure;
         }
+
+        // Get GameManager reference
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        if (gameManager != null)
+        {
+            // Initialize base values if not already done
+            gameManager.InitializeBaseValues(Firerate.Value, Bulletspeed.Value);
+            
+            // Apply difficulty scaling
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            Firerate.Value = scaledFireRate;
+            Bulletspeed.Value = scaledBulletSpeed;
+        }
+        
         fireCooldown = Firerate.Value;
         bulletPoint = Boss.Value.transform.Find("FirePoint");
-        
         
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
+        // Check if we need to reapply difficulty scaling
+        if (gameManager != null && gameManager.resetCount != lastKnownResetCount)
+        {
+            lastKnownResetCount = gameManager.resetCount;
+            // Apply difficulty scaling
+            (float scaledFireRate, float scaledBulletSpeed) = gameManager.GetScaledValues();
+            Firerate.Value = scaledFireRate;
+            Bulletspeed.Value = scaledBulletSpeed;
+        }
+
         handleShooting();
         return Status.Running;
     }
@@ -67,7 +93,6 @@ public partial class BossShootAction : Action
 
     void Shoot()
     {
-
         if (Bulletprefab.Value == null){
             Debug.Log("Bulletprefab is null");
             return;
@@ -88,7 +113,9 @@ public partial class BossShootAction : Action
         EnemyProjectile projectileScript = projectile.GetComponent<EnemyProjectile>();
         if (projectileScript != null)
         {
-            projectileScript.SetDirection((Player.Value.transform.position - bulletPoint.position).normalized);
+            Vector3 direction = (Player.Value.transform.position - bulletPoint.position).normalized;
+            projectileScript.SetDirection(direction);
+            projectileScript.speed = Bulletspeed.Value;
         }
     }
 }
