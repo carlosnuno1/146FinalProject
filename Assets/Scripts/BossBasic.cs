@@ -10,9 +10,10 @@ public class BossEnemy : MonoBehaviour
 
     private Vector2 startPosition;
     private Vector2 moveDirection;
+    private Vector2 movePosition;
     private Rigidbody2D rb;
 
-    private float moveTimer;
+    public bool randomMove = false;
 
     [Header("Shooting")]
     public GameObject projectilePrefab;
@@ -66,7 +67,7 @@ public class BossEnemy : MonoBehaviour
     {
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
-        moveTimer = 0f;
+        randomMove = false;
         canDodge = true;
         isDodging = false;
         dodgeTimer = 0f;
@@ -92,16 +93,32 @@ public class BossEnemy : MonoBehaviour
         moveDirection = direction;
     }
 
+    public void SetMovePosition(Vector2 position)
+    {
+        movePosition = position;
+    }
+
     void HandleMovement()
     {
-        if (isDodging)
-            return; // Don't move while dodging
+        if (isDodging || isShielding)
+            return; // Don't move while dodging or blocking
         if (Vector2.Distance(transform.position, player.position) < 5f)
-        {
+        {   // Move away from player
+            rb.linearVelocity = moveDirection * moveSpeed;
+            randomMove = false; // Interrupts random movement
+        }
+        else if(randomMove)
+        {   // Move randomly
+            if((Vector2)transform.position == movePosition)
+            {
+                randomMove = false;
+                return; // Finished moving to the random position
+            }
+            moveDirection = (movePosition - (Vector2)transform.position).normalized;
             rb.linearVelocity = moveDirection * moveSpeed;
         }
         else
-        {
+        {   // No movement
             rb.linearVelocity = Vector2.zero;
         }
     }
