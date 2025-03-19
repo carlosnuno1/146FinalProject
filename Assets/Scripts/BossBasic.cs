@@ -89,6 +89,7 @@ public class BossEnemy : MonoBehaviour
         isShielding = false;
         shieldTimer = shieldDuration;
         fireCooldown = fireRate;
+        lastKnownResetCount = -1;
         gameObject.SetActive(true);
     }
 

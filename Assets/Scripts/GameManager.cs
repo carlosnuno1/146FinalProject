@@ -65,13 +65,12 @@ public class GameManager : MonoBehaviour
         // Reset player
         player.transform.position = new Vector3(-5, 0, 0);
         player.SetActive(true);
+        MetricsManager.instance.Reset();
         player.GetComponent<PlayerHealth>().Reset();
 
         // Reset boss position and health
         boss.GetComponent<BossEnemy>().ResetToInitialState();
         boss.GetComponent<EnemyHealth>().Reset();
-
-        MetricsManager.instance.Reset();
 
         displayPanel.SetActive(false);
     }

@@ -161,6 +161,8 @@ public class MetricsManager : MonoBehaviour
     public void Reset()
     {
         playerMetrics = new Metrics("Player");
+        playerMetrics.RecordHealth(50);
+        bossMetrics.RecordHealth(50);
         bossMetrics = new Metrics("Boss");
         totalDistance = 0;
         distanceSamples = 0;
