@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
-    public int maxHealth = 50;
+    public int maxHealth = 100;
     private int currentHealth;
 
     public Action OnBossDefeated;

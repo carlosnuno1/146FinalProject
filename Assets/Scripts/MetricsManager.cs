@@ -154,15 +154,17 @@ public class MetricsManager : MonoBehaviour
         SHOOTWEIGHT = playerShotAccuracy != 0 ? playerShotAccuracy : Random.Range(0.1f, 0.9f);
         DODGEWEIGHT = playerBlockAccuracy != 0 ? playerBlockAccuracy : Random.Range(0.1f, 0.9f);
         MOVEWEIGHT = playerMovement != 0 ? playerMovement : Random.Range(0.1f, 0.9f);
-
+        Debug.Log(
+            $"SHOOTWEIGHT: {SHOOTWEIGHT}, DODGEWEIGHT: {DODGEWEIGHT}, MOVEWEIGHT: {MOVEWEIGHT}"
+        );
         UpdateBlackBoard();
     }
 
     public void Reset()
     {
         playerMetrics = new Metrics("Player");
-        playerMetrics.RecordHealth(50);
-        bossMetrics.RecordHealth(50);
+        // playerMetrics.RecordHealth(50);
+        // bossMetrics.RecordHealth(50);
         bossMetrics = new Metrics("Boss");
         totalDistance = 0;
         distanceSamples = 0;

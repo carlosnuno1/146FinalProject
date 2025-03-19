@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
         // Reset player
         player.transform.position = new Vector3(-5, 0, 0);
         player.SetActive(true);
+        MetricsManager.instance.AdjustWeights();
         MetricsManager.instance.Reset();
         player.GetComponent<PlayerHealth>().Reset();
 
