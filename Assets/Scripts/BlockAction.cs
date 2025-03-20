@@ -42,6 +42,11 @@ public partial class BlockAction : Action
             return Status.Success; // Ensure action exits cleanly
         }
 
+        if(BossEnemy.Value.shieldTimer <= 0){
+            Debug.Log("Block ended due to timer.");
+            return Status.Success;
+        }
+
         return Status.Running; // Continue blocking while bullets exist
     }
 

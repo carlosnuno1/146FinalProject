@@ -39,7 +39,7 @@ public class BossEnemy : MonoBehaviour
     public GameObject shieldObject;
     public float shieldDuration = 2f;
 
-    private float shieldTimer;
+    public float shieldTimer;
     private bool canShield = true;
     private bool isShielding = false;
 
