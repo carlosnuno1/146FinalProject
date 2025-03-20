@@ -1114,6 +1114,7 @@ MonoBehaviour:
   player: {fileID: 1367422511}
   displayText: {fileID: 297952759}
   displayPanel: {fileID: 1444631676}
+  resetCount: 0
 --- !u!4 &651423578
 Transform:
   m_ObjectHideFlags: 0
@@ -1161,6 +1162,9 @@ MonoBehaviour:
   player: {fileID: 1367422511}
   boss: {fileID: 1339495193}
   distanceInvokeTime: 1
+  DODGEWEIGHT: 0
+  SHOOTWEIGHT: 0.5
+  MOVEWEIGHT: 0.5
   behaviorGraphAgent: {fileID: 0}
 --- !u!4 &706787570
 Transform:
@@ -1475,6 +1479,7 @@ MonoBehaviour:
   moveRangeX: 5
   moveRangeY: 3
   hoverSpeed: 2
+  randomMove: 0
   projectilePrefab: {fileID: 4357204093563030537, guid: 260e6929911ee5e4f827c1b943fcaa50, type: 3}
   firePoint: {fileID: 442470939}
   fireRate: 2

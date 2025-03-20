@@ -95,7 +95,7 @@ public class MetricsManager : MonoBehaviour
 
     public static MetricsManager instance { get; private set; }
 
-    public float DODGEWEIGHT = 0.5f;
+    public float DODGEWEIGHT = 0f;
     public float SHOOTWEIGHT = 0.5f;
     public float MOVEWEIGHT = 0.5f;
 

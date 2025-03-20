@@ -33,6 +33,10 @@ public partial class SelectWeightedActionSequence : Composite
         float moveweight = MetricsManager.instance.MOVEWEIGHT;
         float dodgeweight = MetricsManager.instance.DODGEWEIGHT;
 
+        Debug.Log(
+            $"SHOOTWEIGHT: {shootweight}, DODGEWEIGHT: {dodgeweight}, MOVEWEIGHT: {moveweight}"
+        );
+
         // pick a random number between 0 and the sum of the weights
         float random = UnityEngine.Random.Range(0, shootweight + moveweight + dodgeweight);
         // execute the action based on the random number
